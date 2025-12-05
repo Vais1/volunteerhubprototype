@@ -3,7 +3,20 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Custom color palette */
 @theme inline {
+  /* Brand colors - #F1F6F9 #394867 #212A3E #9BA4B5 */
+  --color-brand-cream: #F1F6F9;
+  --color-brand-navy: #394867;
+  --color-brand-dark: #212A3E;
+  --color-brand-muted: #9BA4B5;
+  
+  /* Extended palette */
+  --color-brand-navy-light: #4a5d7a;
+  --color-brand-navy-dark: #2d3a52;
+  --color-brand-cream-dark: #e2e8ed;
+  --color-brand-accent: #5a6f8a;
+  
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
