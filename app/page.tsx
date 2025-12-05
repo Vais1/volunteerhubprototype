@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
+import Waves from "@/components/Waves";
 import {
   Card,
   CardContent,
@@ -15,6 +16,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
+
 import {
   Layers,
   AlertTriangle,
@@ -43,6 +45,7 @@ import {
   AlertCircle,
   TrendingUp,
   Maximize2,
+  Minimize2,
 } from "lucide-react";
 
 // Slide data
@@ -248,7 +251,7 @@ function OverviewSlide() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="bg-brand-cream p-5 rounded-lg border border-brand-muted/30"
+          className="bg-brand-cream p-5 rounded-xl shadow-sm"
         >
           <div className="flex items-center gap-2 mb-2">
             <DollarSign className="w-4 h-4 text-brand-muted" />
@@ -261,7 +264,7 @@ function OverviewSlide() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
-          className="bg-brand-cream p-5 rounded-lg border border-brand-muted/30"
+          className="bg-brand-cream p-5 rounded-xl shadow-sm"
         >
           <div className="flex items-center gap-2 mb-2">
             <CalendarDays className="w-4 h-4 text-brand-muted" />
@@ -275,7 +278,7 @@ function OverviewSlide() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="bg-brand-cream p-5 rounded-lg border border-brand-muted/30"
+          className="bg-brand-cream p-5 rounded-xl shadow-sm"
         >
           <div className="flex items-center gap-2 mb-2">
             <User className="w-4 h-4 text-brand-muted" />
@@ -289,7 +292,7 @@ function OverviewSlide() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.25 }}
-          className="bg-brand-cream p-5 rounded-lg border border-brand-muted/30"
+          className="bg-brand-cream p-5 rounded-xl shadow-sm"
         >
           <div className="flex items-center gap-2 mb-2">
             <Building2 className="w-4 h-4 text-brand-muted" />
@@ -304,7 +307,7 @@ function OverviewSlide() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
-        className="bg-brand-dark text-white p-5 rounded-lg mt-4"
+        className="bg-brand-dark text-white p-5 rounded-xl mt-4 shadow-lg"
       >
         <h4 className="font-semibold mb-2 flex items-center gap-2">
           <Target className="w-4 h-4" />
@@ -780,6 +783,26 @@ function RiskSlide() {
 export default function PitchDeck() {
   const [activeSlide, setActiveSlide] = useState(0);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const toggleFullscreen = useCallback(async () => {
+    if (!document.fullscreenElement) {
+      await containerRef.current?.requestFullscreen();
+      setIsFullscreen(true);
+    } else {
+      await document.exitFullscreen();
+      setIsFullscreen(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
+  }, []);
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
@@ -822,21 +845,46 @@ export default function PitchDeck() {
   };
 
   return (
-    <div className="h-screen w-full bg-brand-cream overflow-hidden">
-      <div className="h-full max-w-7xl mx-auto flex flex-col lg:flex-row p-4 lg:p-6 gap-4">
+    <div ref={containerRef} className="h-screen w-full bg-brand-cream overflow-hidden relative">
+      {/* Waves Background */}
+      <Waves
+        lineColor="rgba(57, 72, 103, 0.2)"
+        backgroundColor="transparent"
+        waveSpeedX={0.02}
+        waveSpeedY={0.01}
+        waveAmpX={40}
+        waveAmpY={20}
+        xGap={12}
+        yGap={36}
+        friction={0.9}
+        tension={0.01}
+        maxCursorMove={120}
+        className="z-0"
+      />
+      <div className="h-full max-w-7xl mx-auto flex flex-col lg:flex-row p-2 lg:p-4 gap-3 relative z-10">
         {/* Mobile Header */}
-        <div className="lg:hidden flex items-center justify-between">
-          <h1 className="text-lg font-bold text-slate-800">
+        <div className="lg:hidden flex items-center justify-between bg-white/90 backdrop-blur-sm rounded-lg px-3 py-2">
+          <h1 className="text-lg font-bold text-brand-dark">
             VolunteerHub
           </h1>
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="border-slate-300"
-          >
-            <Menu className="w-5 h-5" />
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={toggleFullscreen}
+              className="h-8 w-8"
+            >
+              {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="h-8 w-8"
+            >
+              <Menu className="w-5 h-5" />
+            </Button>
+          </div>
         </div>
 
         {/* Mobile Timeline Dropdown */}
@@ -848,16 +896,16 @@ export default function PitchDeck() {
               exit={{ opacity: 0, height: 0 }}
               className="lg:hidden overflow-hidden"
             >
-              <div className="flex gap-2 overflow-x-auto pb-3 px-1">
+              <div className="flex gap-2 overflow-x-auto pb-2 px-1 bg-white/90 backdrop-blur-sm rounded-lg p-2">
                 {slides.map((slide, index) => {
                   const Icon = slide.icon;
                   const isActive = index === activeSlide;
                   return (
                     <Button
                       key={slide.id}
-                      variant={isActive ? "default" : "outline"}
+                      variant={isActive ? "default" : "ghost"}
                       size="sm"
-                      className={`shrink-0 ${isActive ? "bg-brand-dark" : "border-brand-muted"}`}
+                      className={`shrink-0 ${isActive ? "bg-brand-dark" : ""}`}
                       onClick={() => {
                         setActiveSlide(index);
                         setIsMobileMenuOpen(false);
@@ -874,10 +922,10 @@ export default function PitchDeck() {
         </AnimatePresence>
 
         {/* Desktop Timeline Sidebar */}
-        <div className="hidden lg:flex flex-col items-center w-56 shrink-0">
-          <div className="relative flex flex-col items-center py-6 h-full justify-center">
+        <div className="hidden lg:flex flex-col items-center w-56 shrink-0 bg-white/80 backdrop-blur-sm rounded-xl p-3">
+          <div className="relative flex flex-col items-center py-4 h-full justify-center">
             {/* Vertical line */}
-            <div className="absolute left-6 top-6 bottom-6 w-px bg-brand-muted/50" />
+            <div className="absolute left-6 top-4 bottom-4 w-px bg-brand-muted/30" />
 
             {/* Timeline nodes */}
             {slides.map((slide, index) => {
@@ -941,10 +989,10 @@ export default function PitchDeck() {
 
           {/* Navigation hint */}
           <div className="mt-auto flex items-center gap-1 text-xs text-brand-muted">
-            <kbd className="px-1.5 py-0.5 bg-white rounded border border-brand-muted/30 text-brand-navy">
+            <kbd className="px-1.5 py-0.5 bg-brand-cream rounded text-brand-navy">
               ↑
             </kbd>
-            <kbd className="px-1.5 py-0.5 bg-white rounded border border-brand-muted/30 text-brand-navy">
+            <kbd className="px-1.5 py-0.5 bg-brand-cream rounded text-brand-navy">
               ↓
             </kbd>
             <span className="ml-1">navigate</span>
@@ -953,8 +1001,8 @@ export default function PitchDeck() {
 
         {/* Main Content Card */}
         <div className="flex-1 flex flex-col min-h-0">
-          <Card className="flex-1 overflow-hidden shadow-lg border-brand-muted/30 bg-white">
-            <CardHeader className="border-b border-brand-cream-dark bg-brand-cream py-4">
+          <Card className="flex-1 overflow-hidden shadow-xl border-0 bg-white/95 backdrop-blur-sm">
+            <CardHeader className="border-b border-brand-cream-dark/50 bg-brand-cream/80 py-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="p-2 bg-brand-dark rounded-lg">
@@ -975,9 +1023,18 @@ export default function PitchDeck() {
 
                 <div className="flex items-center gap-1">
                   <Button
-                    variant="outline"
+                    variant="ghost"
                     size="icon"
-                    className="h-8 w-8 border-brand-muted/50"
+                    className="h-8 w-8 hidden lg:flex"
+                    onClick={toggleFullscreen}
+                    title={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+                  >
+                    {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8"
                     onClick={() =>
                       setActiveSlide((prev) => (prev > 0 ? prev - 1 : prev))
                     }
@@ -986,9 +1043,9 @@ export default function PitchDeck() {
                     <ChevronUp className="w-4 h-4" />
                   </Button>
                   <Button
-                    variant="outline"
+                    variant="ghost"
                     size="icon"
-                    className="h-8 w-8 border-brand-muted/50"
+                    className="h-8 w-8"
                     onClick={() =>
                       setActiveSlide((prev) =>
                         prev < slides.length - 1 ? prev + 1 : prev
@@ -1022,7 +1079,7 @@ export default function PitchDeck() {
           </Card>
 
           {/* Progress indicator */}
-          <div className="mt-3 flex justify-center gap-1.5">
+          <div className="mt-2 flex justify-center gap-1.5 bg-white/80 backdrop-blur-sm rounded-full px-3 py-1.5 mx-auto w-fit">
             {slides.map((_, index) => (
               <button
                 key={index}
@@ -1032,7 +1089,7 @@ export default function PitchDeck() {
                   ${
                     index === activeSlide
                       ? "w-6 bg-brand-dark"
-                      : "w-1.5 bg-brand-muted/50 hover:bg-brand-muted"
+                      : "w-1.5 bg-brand-muted/40 hover:bg-brand-muted"
                   }
                 `}
               />

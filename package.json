@@ -1,6 +1,8 @@
 {
-  "name": "volunteerhubprototype",
-  "version": "0.1.0",
+  "name": "volunteerhub",
+  "version": "1.0.0",
+  "description": "VolunteerHub - Centralized Volunteer Management System for streamlined registration, scheduling, and reporting",
+  "author": "VolunteerHub Team",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -17,9 +19,11 @@
     "framer-motion": "^12.23.25",
     "lucide-react": "^0.555.0",
     "next": "16.0.7",
+    "postprocessing": "^6.38.0",
     "react": "19.2.0",
     "react-dom": "19.2.0",
     "tailwind-merge": "^3.4.0",
+    "three": "^0.181.2",
     "yet-another-react-lightbox": "^3.25.0"
   },
   "devDependencies": {
@@ -27,6 +31,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/three": "^0.181.0",
     "eslint": "^9",
     "eslint-config-next": "16.0.7",
     "tailwindcss": "^4",
