@@ -130,6 +130,13 @@ const teamMembers = [
     avatar: "/avatars/daniel.png",
     responsibilities: "Executive oversight, funding, strategic alignment",
   },
+  {
+    name: "Ms. Sarah Chen",
+    role: "Executive Sponsor",
+    initials: "SC",
+    avatar: "/avatars/sarah.png",
+    responsibilities: "Strategic direction, high-level governance",
+  },
 ];
 
 const wbsPhases = [
@@ -728,6 +735,10 @@ function TeamSlide() {
       >
         <h4 className="font-semibold text-brand-navy mb-3 text-sm">Key Stakeholders</h4>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+          <div className="text-center p-3 bg-white rounded border border-brand-muted/20">
+            <p className="font-medium text-brand-navy">Ms. Sarah Chen</p>
+            <p className="text-xs text-brand-muted">Executive Sponsor</p>
+          </div>
           <div className="text-center p-3 bg-white rounded border border-brand-muted/20">
             <p className="font-medium text-brand-navy">Daniel Lee</p>
             <p className="text-xs text-brand-muted">Business Sponsor</p>
