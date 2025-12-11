@@ -4,7 +4,9 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence, animate } from "framer-motion";
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
+import { useTheme } from "next-themes";
 import Waves from "@/components/Waves";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import {
   Card,
   CardContent,
@@ -153,7 +155,7 @@ const risks = [
     probability: "High",
     impact: "High",
     mitigation: "Formal change control process with 48-hour sign-off windows",
-    color: "bg-rose-50 border-rose-200 text-rose-800",
+    color: "bg-rose-50 dark:bg-rose-900/20 border-rose-200 dark:border-rose-800 text-rose-800 dark:text-rose-200",
   },
   {
     id: 2,
@@ -161,7 +163,7 @@ const risks = [
     probability: "Medium",
     impact: "High",
     mitigation: "Proof of concept for critical components, regular technical reviews",
-    color: "bg-amber-50 border-amber-200 text-amber-800",
+    color: "bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-200",
   },
   {
     id: 3,
@@ -169,7 +171,7 @@ const risks = [
     probability: "Medium",
     impact: "Medium",
     mitigation: "Cross-training team members, documented knowledge base",
-    color: "bg-brand-cream border-brand-muted/30 text-brand-navy",
+    color: "bg-brand-cream dark:bg-slate-800 border-brand-muted/30 text-brand-navy dark:text-slate-300",
   },
 ];
 
@@ -195,7 +197,7 @@ function ChartImage({
   return (
     <>
       <div
-        className={`${aspectRatio} bg-white rounded-lg flex items-center justify-center border border-brand-muted/20 overflow-hidden relative group cursor-pointer`}
+        className={`${aspectRatio} bg-white dark:bg-slate-800 rounded-lg flex items-center justify-center border border-brand-muted/20 overflow-hidden relative group cursor-pointer`}
         onClick={() => !imageError && setIsOpen(true)}
       >
         {!imageError ? (
@@ -209,9 +211,9 @@ function ChartImage({
             />
             {/* Hover overlay */}
             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center">
-              <div className="opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 backdrop-blur-sm px-3 py-2 rounded-lg shadow-lg flex items-center gap-2">
-                <Maximize2 className="w-4 h-4 text-brand-navy" />
-                <span className="text-sm text-brand-navy font-medium">Click to preview</span>
+              <div className="opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm px-3 py-2 rounded-lg shadow-lg flex items-center gap-2">
+                <Maximize2 className="w-4 h-4 text-brand-navy dark:text-slate-200" />
+                <span className="text-sm text-brand-navy dark:text-slate-200 font-medium">Click to preview</span>
               </div>
             </div>
           </>
@@ -266,7 +268,7 @@ function OverviewSlide() {
   return (
     <div className="space-y-6">
       <div className="text-center space-y-3">
-        <Badge className="bg-brand-cream-dark text-brand-navy border-brand-muted/30 hover:bg-brand-cream-dark">
+        <Badge className="bg-brand-cream-dark dark:bg-slate-700 text-brand-navy dark:text-slate-200 border-brand-muted/30 hover:bg-brand-cream-dark dark:hover:bg-slate-600">
           Centralized Volunteer Management System
         </Badge>
         <h2 className="text-4xl md:text-5xl font-bold text-brand-dark">
@@ -284,7 +286,7 @@ function OverviewSlide() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="bg-brand-cream p-5 rounded-xl shadow-sm"
+          className="bg-brand-cream dark:bg-slate-800 p-5 rounded-xl shadow-sm"
         >
           <div className="flex items-center gap-2 mb-2">
             <DollarSign className="w-4 h-4 text-brand-muted" />
@@ -299,7 +301,7 @@ function OverviewSlide() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
-          className="bg-brand-cream p-5 rounded-xl shadow-sm"
+          className="bg-brand-cream dark:bg-slate-800 p-5 rounded-xl shadow-sm"
         >
           <div className="flex items-center gap-2 mb-2">
             <CalendarDays className="w-4 h-4 text-brand-muted" />
@@ -315,7 +317,7 @@ function OverviewSlide() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="bg-brand-cream p-5 rounded-xl shadow-sm"
+          className="bg-brand-cream dark:bg-slate-800 p-5 rounded-xl shadow-sm"
         >
           <div className="flex items-center gap-2 mb-2">
             <User className="w-4 h-4 text-brand-muted" />
@@ -337,7 +339,7 @@ function OverviewSlide() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.25 }}
-          className="bg-brand-cream p-5 rounded-xl shadow-sm"
+          className="bg-brand-cream dark:bg-slate-800 p-5 rounded-xl shadow-sm"
         >
           <div className="flex items-center gap-2 mb-2">
             <Building2 className="w-4 h-4 text-brand-muted" />
@@ -352,13 +354,13 @@ function OverviewSlide() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
-        className="bg-brand-dark text-white p-5 rounded-xl mt-4 shadow-lg"
+        className="bg-brand-dark text-white dark:text-slate-900 p-5 rounded-xl mt-4 shadow-lg"
       >
         <h4 className="font-semibold mb-2 flex items-center gap-2">
           <Target className="w-4 h-4" />
           Project Objective
         </h4>
-        <p className="text-brand-muted text-sm leading-relaxed">
+        <p className="text-brand-muted dark:text-slate-600 text-sm leading-relaxed">
           Develop and deploy a comprehensive volunteer management system that centralizes 
           volunteer data, automates registration processes, and provides real-time reporting 
           capabilities to reduce administrative overhead by 30%.
@@ -380,13 +382,13 @@ function ProblemSolutionSlide() {
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.1 }}
-          className="bg-rose-50 p-5 rounded-lg border border-rose-200"
+          className="bg-rose-50 dark:bg-rose-900/20 p-5 rounded-lg border border-rose-200 dark:border-rose-800"
         >
           <div className="flex items-center gap-2 mb-4">
-            <div className="p-2 bg-rose-100 rounded-lg">
-              <AlertTriangle className="w-5 h-5 text-rose-600" />
+            <div className="p-2 bg-rose-100 dark:bg-rose-800/50 rounded-lg">
+              <AlertTriangle className="w-5 h-5 text-rose-600 dark:text-rose-300" />
             </div>
-            <h3 className="text-lg font-semibold text-rose-800">Current Problems</h3>
+            <h3 className="text-lg font-semibold text-rose-800 dark:text-rose-200">Current Problems</h3>
           </div>
           <ul className="space-y-3">
             {[
@@ -414,13 +416,13 @@ function ProblemSolutionSlide() {
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.2 }}
-          className="bg-teal-50 p-5 rounded-lg border border-teal-200"
+          className="bg-teal-50 dark:bg-teal-900/20 p-5 rounded-lg border border-teal-200 dark:border-teal-800"
         >
           <div className="flex items-center gap-2 mb-4">
-            <div className="p-2 bg-teal-100 rounded-lg">
-              <Lightbulb className="w-5 h-5 text-teal-600" />
+            <div className="p-2 bg-teal-100 dark:bg-teal-800/50 rounded-lg">
+              <Lightbulb className="w-5 h-5 text-teal-600 dark:text-teal-300" />
             </div>
-            <h3 className="text-lg font-semibold text-teal-800">Our Solution</h3>
+            <h3 className="text-lg font-semibold text-teal-800 dark:text-teal-200">Our Solution</h3>
           </div>
           <ul className="space-y-3">
             {[
@@ -449,12 +451,12 @@ function ProblemSolutionSlide() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4 }}
-        className="bg-brand-cream p-4 rounded-lg border border-brand-muted/30"
+        className="bg-brand-cream dark:bg-slate-800 p-4 rounded-lg border border-brand-muted/30"
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <TrendingUp className="w-5 h-5 text-teal-600" />
-            <span className="font-medium text-brand-navy">Expected Impact</span>
+            <span className="font-medium text-brand-navy dark:text-slate-200">Expected Impact</span>
           </div>
           <div className="flex gap-6 text-sm">
             <div className="text-center">
@@ -502,13 +504,13 @@ function ScopeSlide() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="bg-teal-50 p-5 rounded-lg border border-teal-200"
+          className="bg-teal-50 dark:bg-teal-900/20 p-5 rounded-lg border border-teal-200 dark:border-teal-800"
         >
           <div className="flex items-center gap-2 mb-4">
             <div className="p-1.5 bg-teal-500 rounded">
               <Check className="w-4 h-4 text-white" />
             </div>
-            <h3 className="font-semibold text-teal-800">In Scope</h3>
+            <h3 className="font-semibold text-teal-800 dark:text-teal-200">In Scope</h3>
           </div>
           <div className="space-y-3">
             {inScope.map((item, index) => (
@@ -517,7 +519,7 @@ function ScopeSlide() {
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.15 + index * 0.05 }}
-                className="flex items-start gap-3 bg-white p-3 rounded-lg border border-teal-100"
+                className="flex items-start gap-3 bg-white dark:bg-slate-800 p-3 rounded-lg border border-teal-100 dark:border-teal-900"
               >
                 <item.icon className="w-5 h-5 text-teal-600 mt-0.5 shrink-0" />
                 <div>
@@ -533,13 +535,13 @@ function ScopeSlide() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="bg-brand-cream p-5 rounded-lg border border-brand-muted/30"
+          className="bg-brand-cream dark:bg-slate-800 p-5 rounded-lg border border-brand-muted/30"
         >
           <div className="flex items-center gap-2 mb-4">
             <div className="p-1.5 bg-brand-muted rounded">
               <X className="w-4 h-4 text-white" />
             </div>
-            <h3 className="font-semibold text-brand-navy">Out of Scope</h3>
+            <h3 className="font-semibold text-brand-navy dark:text-slate-200">Out of Scope</h3>
           </div>
           <div className="space-y-3">
             {outOfScope.map((item, index) => (
@@ -548,11 +550,11 @@ function ScopeSlide() {
                 initial={{ opacity: 0, x: 10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.25 + index * 0.05 }}
-                className="flex items-start gap-3 bg-white p-3 rounded-lg border border-brand-muted/20"
+                className="flex items-start gap-3 bg-white dark:bg-slate-800 p-3 rounded-lg border border-brand-muted/20"
               >
                 <item.icon className="w-5 h-5 text-brand-muted mt-0.5 shrink-0" />
                 <div>
-                  <p className="font-medium text-brand-navy text-sm">{item.title}</p>
+                  <p className="font-medium text-brand-navy dark:text-slate-200 text-sm">{item.title}</p>
                   <p className="text-xs text-brand-muted">{item.desc}</p>
                 </div>
               </motion.div>
@@ -582,10 +584,10 @@ function WBSSlide() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 + index * 0.05 }}
-            className="bg-white p-4 rounded-lg border border-brand-muted/20 hover:border-brand-muted/50 hover:shadow-sm transition-all"
+            className="bg-white dark:bg-slate-800 p-4 rounded-lg border border-brand-muted/20 hover:border-brand-muted/50 hover:shadow-sm transition-all"
           >
             <div className="flex items-center gap-3 mb-2">
-              <span className="text-xs font-bold text-white bg-brand-dark px-2 py-1 rounded">
+              <span className="text-xs font-bold text-white dark:text-slate-900 bg-brand-dark px-2 py-1 rounded">
                 {phase.phase}
               </span>
               <h4 className="font-semibold text-brand-dark text-sm">{phase.name}</h4>
@@ -599,7 +601,7 @@ function WBSSlide() {
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.4 }}
-        className="bg-brand-cream p-4 rounded-lg border border-brand-muted/30 mt-4"
+        className="bg-brand-cream dark:bg-slate-800 p-4 rounded-lg border border-brand-muted/30 mt-4"
       >
         <ChartImage
           src="/charts/wbs.png"
@@ -651,21 +653,21 @@ function ScheduleSlide() {
             onMouseLeave={() => setHoveredIndex(null)}
             className={`p-3 rounded-lg border text-center cursor-pointer relative transition-colors ${
               item.status === "complete"
-                ? "bg-teal-50 border-teal-200"
+                ? "bg-teal-50 dark:bg-teal-900/20 border-teal-200 dark:border-teal-800"
                 : item.status === "current"
                 ? "bg-brand-navy/10 border-brand-navy ring-2 ring-brand-navy/20"
-                : "bg-brand-cream border-brand-muted/30"
+                : "bg-brand-cream dark:bg-slate-800 border-brand-muted/30"
             }`}
           >
             <p className={`text-xs font-medium ${
-              item.status === "complete" ? "text-teal-600" :
-              item.status === "current" ? "text-brand-navy" : "text-brand-muted"
+              item.status === "complete" ? "text-teal-600 dark:text-teal-400" :
+              item.status === "current" ? "text-brand-navy dark:text-slate-200" : "text-brand-muted"
             }`}>
               {item.date}
             </p>
             <p className={`text-xs mt-1 ${
-              item.status === "complete" ? "text-teal-700" :
-              item.status === "current" ? "text-brand-dark font-medium" : "text-brand-navy"
+              item.status === "complete" ? "text-teal-700 dark:text-teal-300" :
+              item.status === "current" ? "text-brand-dark dark:text-slate-300 font-medium" : "text-brand-navy dark:text-slate-400"
             }`}>
               {item.milestone}
             </p>
@@ -673,7 +675,7 @@ function ScheduleSlide() {
               <Check className="w-4 h-4 text-teal-500 mx-auto mt-1" />
             )}
             {item.status === "current" && (
-              <div className="w-2 h-2 bg-brand-navy rounded-full mx-auto mt-2 animate-pulse" />
+              <div className="w-2 h-2 bg-brand-navy dark:bg-blue-400 rounded-full mx-auto mt-2 animate-pulse" />
             )}
           </motion.div>
         ))}
@@ -683,7 +685,7 @@ function ScheduleSlide() {
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.4 }}
-        className="bg-brand-cream p-4 rounded-lg border border-brand-muted/30"
+        className="bg-brand-cream dark:bg-slate-800 p-4 rounded-lg border border-brand-muted/30"
       >
         <ChartImage
           src="/charts/gantt.png"
@@ -716,17 +718,17 @@ function TeamSlide() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 + index * 0.08 }}
-            className="flex items-start gap-4 p-4 rounded-lg bg-white border border-brand-muted/20 hover:border-brand-muted/50 hover:shadow-sm transition-all"
+            className="flex items-start gap-4 p-4 rounded-lg bg-white dark:bg-slate-800 border border-brand-muted/20 hover:border-brand-muted/50 hover:shadow-sm transition-all"
           >
             <Avatar className="w-12 h-12 shrink-0">
               <AvatarImage src={member.avatar} alt={member.name} />
-              <AvatarFallback className="bg-brand-dark text-white font-semibold text-sm">
+              <AvatarFallback className="bg-brand-dark text-white dark:text-slate-900 font-semibold text-sm">
                 {member.initials}
               </AvatarFallback>
             </Avatar>
             <div className="flex-1 min-w-0">
               <h4 className="font-semibold text-brand-dark">{member.name}</h4>
-              <Badge variant="secondary" className="mt-1 text-xs bg-brand-cream-dark text-brand-navy hover:bg-brand-cream-dark">
+              <Badge variant="secondary" className="mt-1 text-xs bg-brand-cream-dark dark:bg-slate-700 text-brand-navy dark:text-slate-200 hover:bg-brand-cream-dark dark:hover:bg-slate-600">
                 {member.role}
               </Badge>
               <p className="text-xs text-brand-muted mt-2">{member.responsibilities}</p>
@@ -739,28 +741,28 @@ function TeamSlide() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5 }}
-        className="bg-brand-cream p-4 rounded-lg border border-brand-muted/30"
+        className="bg-brand-cream dark:bg-slate-800 p-4 rounded-lg border border-brand-muted/30"
       >
-        <h4 className="font-semibold text-brand-navy mb-3 text-sm">Key Stakeholders</h4>
+        <h4 className="font-semibold text-brand-navy dark:text-slate-200 mb-3 text-sm">Key Stakeholders</h4>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
-          <div className="text-center p-3 bg-white rounded border border-brand-muted/20">
-            <p className="font-medium text-brand-navy">Ms. Sarah Chen</p>
+          <div className="text-center p-3 bg-white dark:bg-slate-800 rounded border border-brand-muted/20">
+            <p className="font-medium text-brand-navy dark:text-slate-200">Ms. Sarah Chen</p>
             <p className="text-xs text-brand-muted">Executive Sponsor</p>
           </div>
-          <div className="text-center p-3 bg-white rounded border border-brand-muted/20">
-            <p className="font-medium text-brand-navy">Daniel Lee</p>
+          <div className="text-center p-3 bg-white dark:bg-slate-800 rounded border border-brand-muted/20">
+            <p className="font-medium text-brand-navy dark:text-slate-200">Daniel Lee</p>
             <p className="text-xs text-brand-muted">Business Sponsor</p>
           </div>
-          <div className="text-center p-3 bg-white rounded border border-brand-muted/20">
-            <p className="font-medium text-brand-navy">IT Department</p>
+          <div className="text-center p-3 bg-white dark:bg-slate-800 rounded border border-brand-muted/20">
+            <p className="font-medium text-brand-navy dark:text-slate-200">IT Department</p>
             <p className="text-xs text-brand-muted">Infrastructure</p>
           </div>
-          <div className="text-center p-3 bg-white rounded border border-brand-muted/20">
-            <p className="font-medium text-brand-navy">Volunteer Coordinators</p>
+          <div className="text-center p-3 bg-white dark:bg-slate-800 rounded border border-brand-muted/20">
+            <p className="font-medium text-brand-navy dark:text-slate-200">Volunteer Coordinators</p>
             <p className="text-xs text-brand-muted">End Users</p>
           </div>
-          <div className="text-center p-3 bg-white rounded border border-brand-muted/20">
-            <p className="font-medium text-brand-navy">Volunteers</p>
+          <div className="text-center p-3 bg-white dark:bg-slate-800 rounded border border-brand-muted/20">
+            <p className="font-medium text-brand-navy dark:text-slate-200">Volunteers</p>
             <p className="text-xs text-brand-muted">Portal Users</p>
           </div>
         </div>
@@ -815,20 +817,20 @@ function RiskSlide() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4 }}
-        className="bg-brand-dark text-white p-4 rounded-lg"
+        className="bg-brand-dark text-white dark:text-slate-900 p-4 rounded-lg"
       >
         <h4 className="font-semibold mb-3 flex items-center gap-2">
           <ShieldAlert className="w-4 h-4" />
           Risk Response Strategy
         </h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
-          <div className="bg-brand-navy/50 p-3 rounded">
-            <p className="font-medium text-brand-cream">Weekly Risk Reviews</p>
-            <p className="text-brand-muted text-xs mt-1">Regular assessment in team meetings</p>
+          <div className="bg-brand-navy/50 dark:bg-slate-400/50 p-3 rounded">
+            <p className="font-medium text-brand-cream dark:text-slate-900">Weekly Risk Reviews</p>
+            <p className="text-brand-muted dark:text-slate-700 text-xs mt-1">Regular assessment in team meetings</p>
           </div>
-          <div className="bg-brand-navy/50 p-3 rounded">
-            <p className="font-medium text-brand-cream">Contingency Reserve</p>
-            <p className="text-brand-muted text-xs mt-1">10% budget buffer for unknowns</p>
+          <div className="bg-brand-navy/50 dark:bg-slate-400/50 p-3 rounded">
+            <p className="font-medium text-brand-cream dark:text-slate-900">Contingency Reserve</p>
+            <p className="text-brand-muted dark:text-slate-700 text-xs mt-1">10% budget buffer for unknowns</p>
           </div>
         </div>
       </motion.div>
@@ -843,6 +845,12 @@ export default function PitchDeck() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const { theme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const changeSlide = useCallback((newIndex: number) => {
     if (newIndex < 0 || newIndex >= slides.length) return;
@@ -926,10 +934,10 @@ export default function PitchDeck() {
   };
 
   return (
-    <div ref={containerRef} className="h-screen w-full bg-brand-cream overflow-hidden relative">
+    <div ref={containerRef} className="h-screen w-full bg-brand-cream overflow-hidden relative transition-colors duration-300">
       {/* Waves Background */}
       <Waves
-        lineColor="rgba(57, 72, 103, 0.2)"
+        lineColor={mounted && theme === 'dark' ? "rgba(148, 163, 184, 0.2)" : "rgba(57, 72, 103, 0.2)"}
         backgroundColor="transparent"
         waveSpeedX={0.02}
         waveSpeedY={0.01}
@@ -944,11 +952,12 @@ export default function PitchDeck() {
       />
       <div className="h-full max-w-7xl mx-auto flex flex-col lg:flex-row p-2 lg:p-4 gap-3 relative z-10">
         {/* Mobile Header */}
-        <div className="lg:hidden flex items-center justify-between bg-white/90 backdrop-blur-sm rounded-lg px-3 py-2">
+        <div className="lg:hidden flex items-center justify-between bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm rounded-lg px-3 py-2 transition-colors duration-300">
           <h1 className="text-lg font-bold text-brand-dark">
             VolunteerHub
           </h1>
           <div className="flex gap-2">
+            <ThemeToggle />
             <Button
               variant="ghost"
               size="icon"
@@ -977,7 +986,7 @@ export default function PitchDeck() {
               exit={{ opacity: 0, height: 0 }}
               className="lg:hidden overflow-hidden"
             >
-              <div className="flex gap-2 overflow-x-auto pb-2 px-1 bg-white/90 backdrop-blur-sm rounded-lg p-2">
+              <div className="flex gap-2 overflow-x-auto pb-2 px-1 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm rounded-lg p-2">
                 {slides.map((slide, index) => {
                   const Icon = slide.icon;
                   const isActive = index === activeSlide;
@@ -986,7 +995,7 @@ export default function PitchDeck() {
                       key={slide.id}
                       variant={isActive ? "default" : "ghost"}
                       size="sm"
-                      className={`shrink-0 ${isActive ? "bg-brand-dark" : ""}`}
+                      className={`shrink-0 ${isActive ? "bg-brand-dark text-white dark:text-slate-900" : ""}`}
                       onClick={() => {
                         changeSlide(index);
                         setIsMobileMenuOpen(false);
@@ -1003,7 +1012,10 @@ export default function PitchDeck() {
         </AnimatePresence>
 
         {/* Desktop Timeline Sidebar */}
-        <div className="hidden lg:flex flex-col items-center w-56 shrink-0 bg-white/80 backdrop-blur-sm rounded-xl p-3">
+        <div className="hidden lg:flex flex-col items-center w-56 shrink-0 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm rounded-xl p-3 transition-colors duration-300">
+          <div className="w-full flex justify-end">
+            <ThemeToggle />
+          </div>
           <div className="relative flex flex-col items-center py-4 h-full justify-center">
             {/* Vertical line */}
             <div className="absolute left-6 top-4 bottom-4 w-px bg-brand-muted/30" />
@@ -1032,17 +1044,17 @@ export default function PitchDeck() {
                           ? "bg-brand-dark border-brand-dark shadow-md"
                           : isPast
                           ? "bg-brand-cream-dark border-brand-muted"
-                          : "bg-white border-brand-muted group-hover:border-brand-navy"
+                          : "bg-white dark:bg-slate-800 border-brand-muted group-hover:border-brand-navy"
                       }
                     `}
                   >
                     <Icon
                       className={`w-5 h-5 ${
                         isActive
-                          ? "text-white"
+                          ? "text-white dark:text-slate-900"
                           : isPast
-                          ? "text-brand-navy"
-                          : "text-brand-muted group-hover:text-brand-navy"
+                          ? "text-brand-navy dark:text-slate-400"
+                          : "text-brand-muted group-hover:text-brand-navy dark:group-hover:text-slate-200"
                       }`}
                     />
                   </div>
@@ -1054,10 +1066,10 @@ export default function PitchDeck() {
                       transition-colors duration-200
                       ${
                         isActive
-                          ? "text-brand-dark"
+                          ? "text-brand-dark dark:text-slate-200"
                           : isPast
-                          ? "text-brand-navy"
-                          : "text-brand-muted group-hover:text-brand-navy"
+                          ? "text-brand-navy dark:text-slate-400"
+                          : "text-brand-muted group-hover:text-brand-navy dark:group-hover:text-slate-200"
                       }
                     `}
                   >
@@ -1070,10 +1082,10 @@ export default function PitchDeck() {
 
           {/* Navigation hint */}
           <div className="mt-auto flex items-center gap-1 text-xs text-brand-muted">
-            <kbd className="px-1.5 py-0.5 bg-brand-cream rounded text-brand-navy">
+            <kbd className="px-1.5 py-0.5 bg-brand-cream dark:bg-slate-800 rounded text-brand-navy dark:text-slate-200">
               ↑
             </kbd>
-            <kbd className="px-1.5 py-0.5 bg-brand-cream rounded text-brand-navy">
+            <kbd className="px-1.5 py-0.5 bg-brand-cream dark:bg-slate-800 rounded text-brand-navy dark:text-slate-200">
               ↓
             </kbd>
             <span className="ml-1">navigate</span>
@@ -1082,14 +1094,14 @@ export default function PitchDeck() {
 
         {/* Main Content Card */}
         <div className="flex-1 flex flex-col min-h-0">
-          <Card className="flex-1 overflow-hidden shadow-xl border-0 bg-white/95 backdrop-blur-sm">
-            <CardHeader className="border-b border-brand-cream-dark/50 bg-brand-cream/80 py-3">
+          <Card className="flex-1 overflow-hidden shadow-xl border-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm">
+            <CardHeader className="border-b border-brand-cream-dark/50 bg-brand-cream/80 dark:bg-slate-800/80 py-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="p-2 bg-brand-dark rounded-lg">
                     {(() => {
                       const Icon = slides[activeSlide].icon;
-                      return <Icon className="w-4 h-4 text-white" />;
+                      return <Icon className="w-4 h-4 text-white dark:text-slate-900" />;
                     })()}
                   </div>
                   <div>
@@ -1156,7 +1168,7 @@ export default function PitchDeck() {
           </Card>
 
           {/* Progress indicator */}
-          <div className="mt-2 flex justify-center gap-1.5 bg-white/80 backdrop-blur-sm rounded-full px-3 py-1.5 mx-auto w-fit">
+          <div className="mt-2 flex justify-center gap-1.5 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm rounded-full px-3 py-1.5 mx-auto w-fit">
             {slides.map((_, index) => (
               <button
                 key={index}
