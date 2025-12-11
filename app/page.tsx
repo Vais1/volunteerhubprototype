@@ -123,16 +123,20 @@ const teamMembers = [
     avatar: "/avatars/martin.jpeg",
     responsibilities: "Frontend, testing, support",
   },
+  {
+    name: "Daniel Lee",
+    role: "Business Sponsor",
+    initials: "DL",
+    avatar: "/avatars/daniel.png",
+    responsibilities: "Executive oversight, funding, strategic alignment",
+  },
 ];
 
 const wbsPhases = [
-  { phase: "1.0", name: "Project Initiation", tasks: "Charter, stakeholder identification" },
-  { phase: "2.0", name: "Planning", tasks: "WBS, schedule, risk plan, budget" },
-  { phase: "3.0", name: "Requirements", tasks: "Gathering, analysis, documentation" },
-  { phase: "4.0", name: "Design", tasks: "System architecture, UI/UX, database" },
-  { phase: "5.0", name: "Development", tasks: "Frontend, backend, integration" },
-  { phase: "6.0", name: "Testing", tasks: "Unit, integration, UAT" },
-  { phase: "7.0", name: "Deployment", tasks: "Go-live, training, handover" },
+  { phase: "1.0", name: "Initiation", tasks: "Charter approval, stakeholder alignment" },
+  { phase: "2.0", name: "Planning & Design", tasks: "WBS, schedule, solution design, risk plan" },
+  { phase: "3.0", name: "Execution", tasks: "Development, integration, data preparation" },
+  { phase: "4.0", name: "Test & Launch", tasks: "UAT, training, go-live, handover" },
 ];
 
 const risks = [
@@ -284,8 +288,8 @@ function OverviewSlide() {
             <User className="w-4 h-4 text-brand-muted" />
             <span className="text-xs font-medium text-brand-muted uppercase tracking-wide">Sponsor</span>
           </div>
-          <p className="text-xl font-semibold text-brand-dark">Sarah Chen</p>
-          <p className="text-xs text-brand-muted mt-1">Executive Director</p>
+          <p className="text-xl font-semibold text-brand-dark">Daniel Lee</p>
+          <p className="text-xs text-brand-muted mt-1">Business Sponsor</p>
         </motion.div>
 
         <motion.div
@@ -691,8 +695,8 @@ function TeamSlide() {
         <h4 className="font-semibold text-brand-navy mb-3 text-sm">Key Stakeholders</h4>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
           <div className="text-center p-3 bg-white rounded border border-brand-muted/20">
-            <p className="font-medium text-brand-navy">Sarah Chen</p>
-            <p className="text-xs text-brand-muted">Project Sponsor</p>
+            <p className="font-medium text-brand-navy">Daniel Lee</p>
+            <p className="text-xs text-brand-muted">Business Sponsor</p>
           </div>
           <div className="text-center p-3 bg-white rounded border border-brand-muted/20">
             <p className="font-medium text-brand-navy">IT Department</p>
