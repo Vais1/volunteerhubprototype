@@ -319,10 +319,18 @@ function OverviewSlide() {
         >
           <div className="flex items-center gap-2 mb-2">
             <User className="w-4 h-4 text-brand-muted" />
-            <span className="text-xs font-medium text-brand-muted uppercase tracking-wide">Sponsor</span>
+            <span className="text-xs font-medium text-brand-muted uppercase tracking-wide">Sponsors</span>
           </div>
-          <p className="text-xl font-semibold text-brand-dark">Daniel Lee</p>
-          <p className="text-xs text-brand-muted mt-1">Business Sponsor</p>
+          <div className="flex flex-col gap-2">
+            <div>
+              <p className="text-sm font-semibold text-brand-dark">Ms. Sarah Chen</p>
+              <p className="text-[10px] text-brand-muted leading-none">Executive Sponsor</p>
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-brand-dark">Daniel Lee</p>
+              <p className="text-[10px] text-brand-muted leading-none">Business Sponsor</p>
+            </div>
+          </div>
         </motion.div>
 
         <motion.div
