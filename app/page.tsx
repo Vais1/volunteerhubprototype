@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, animate } from "framer-motion";
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
 import Waves from "@/components/Waves";
@@ -232,6 +232,28 @@ function ChartImage({
   );
 }
 
+function Counter({ from, to, duration = 2, prefix = "", suffix = "" }: { from: number; to: number; duration?: number; prefix?: string; suffix?: string }) {
+  const nodeRef = useRef<HTMLSpanElement>(null);
+
+  useEffect(() => {
+    const node = nodeRef.current;
+    if (!node) return;
+
+    const controls = animate(from, to, {
+      duration,
+      onUpdate(value) {
+        const formatted = Math.round(value).toLocaleString();
+        node.textContent = `${prefix}${formatted}${suffix}`;
+      },
+      ease: "easeOut"
+    });
+
+    return () => controls.stop();
+  }, [from, to, duration, prefix, suffix]);
+
+  return <span ref={nodeRef} />;
+}
+
 // Slide content components
 function OverviewSlide() {
   return (
@@ -261,7 +283,9 @@ function OverviewSlide() {
             <DollarSign className="w-4 h-4 text-brand-muted" />
             <span className="text-xs font-medium text-brand-muted uppercase tracking-wide">Budget</span>
           </div>
-          <p className="text-xl font-semibold text-brand-dark">RM 120,000</p>
+          <p className="text-xl font-semibold text-brand-dark">
+            <Counter from={0} to={120000} prefix="RM " />
+          </p>
         </motion.div>
 
         <motion.div
@@ -274,7 +298,9 @@ function OverviewSlide() {
             <CalendarDays className="w-4 h-4 text-brand-muted" />
             <span className="text-xs font-medium text-brand-muted uppercase tracking-wide">Duration</span>
           </div>
-          <p className="text-xl font-semibold text-brand-dark">6 Months</p>
+          <p className="text-xl font-semibold text-brand-dark">
+            <Counter from={0} to={6} suffix=" Months" />
+          </p>
           <p className="text-xs text-brand-muted mt-1">Jun – Dec 2025</p>
         </motion.div>
 
@@ -577,6 +603,7 @@ function WBSSlide() {
 }
 
 function ScheduleSlide() {
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const milestones = [
     { date: "Jun 2025", milestone: "Project Kickoff", status: "complete" },
     { date: "Jul 2025", milestone: "Requirements Finalized", status: "complete" },
@@ -598,9 +625,16 @@ function ScheduleSlide() {
           <motion.div
             key={item.date}
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            animate={{ 
+              opacity: 1, 
+              y: 0,
+              scale: hoveredIndex === index ? 1.05 : 1,
+              boxShadow: hoveredIndex === index ? "0 10px 15px -3px rgba(0, 0, 0, 0.1)" : "none"
+            }}
             transition={{ delay: 0.1 + index * 0.05 }}
-            className={`p-3 rounded-lg border text-center ${
+            onMouseEnter={() => setHoveredIndex(index)}
+            onMouseLeave={() => setHoveredIndex(null)}
+            className={`p-3 rounded-lg border text-center cursor-pointer relative transition-colors ${
               item.status === "complete"
                 ? "bg-teal-50 border-teal-200"
                 : item.status === "current"
@@ -786,9 +820,16 @@ function RiskSlide() {
 // Main component
 export default function PitchDeck() {
   const [activeSlide, setActiveSlide] = useState(0);
+  const [direction, setDirection] = useState(0);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  const changeSlide = useCallback((newIndex: number) => {
+    if (newIndex < 0 || newIndex >= slides.length) return;
+    setDirection(newIndex > activeSlide ? 1 : -1);
+    setActiveSlide(newIndex);
+  }, [activeSlide]);
 
   const toggleFullscreen = useCallback(async () => {
     if (!document.fullscreenElement) {
@@ -812,13 +853,13 @@ export default function PitchDeck() {
     (e: KeyboardEvent) => {
       if (e.key === "ArrowUp" || e.key === "ArrowLeft") {
         e.preventDefault();
-        setActiveSlide((prev) => (prev > 0 ? prev - 1 : prev));
+        changeSlide(activeSlide - 1);
       } else if (e.key === "ArrowDown" || e.key === "ArrowRight") {
         e.preventDefault();
-        setActiveSlide((prev) => (prev < slides.length - 1 ? prev + 1 : prev));
+        changeSlide(activeSlide + 1);
       }
     },
-    []
+    [activeSlide, changeSlide]
   );
 
   useEffect(() => {
@@ -846,6 +887,23 @@ export default function PitchDeck() {
       default:
         return <OverviewSlide />;
     }
+  };
+
+  const variants = {
+    enter: (direction: number) => ({
+      y: direction > 0 ? 50 : -50,
+      opacity: 0
+    }),
+    center: {
+      zIndex: 1,
+      y: 0,
+      opacity: 1
+    },
+    exit: (direction: number) => ({
+      zIndex: 0,
+      y: direction < 0 ? 50 : -50,
+      opacity: 0
+    })
   };
 
   return (
@@ -911,7 +969,7 @@ export default function PitchDeck() {
                       size="sm"
                       className={`shrink-0 ${isActive ? "bg-brand-dark" : ""}`}
                       onClick={() => {
-                        setActiveSlide(index);
+                        changeSlide(index);
                         setIsMobileMenuOpen(false);
                       }}
                     >
@@ -940,7 +998,7 @@ export default function PitchDeck() {
               return (
                 <motion.button
                   key={slide.id}
-                  onClick={() => setActiveSlide(index)}
+                  onClick={() => changeSlide(index)}
                   className="relative z-10 flex items-center gap-3 my-2 group w-full"
                   whileHover={{ x: 4 }}
                   whileTap={{ scale: 0.98 }}
@@ -1039,9 +1097,7 @@ export default function PitchDeck() {
                     variant="ghost"
                     size="icon"
                     className="h-8 w-8"
-                    onClick={() =>
-                      setActiveSlide((prev) => (prev > 0 ? prev - 1 : prev))
-                    }
+                    onClick={() => changeSlide(activeSlide - 1)}
                     disabled={activeSlide === 0}
                   >
                     <ChevronUp className="w-4 h-4" />
@@ -1050,11 +1106,7 @@ export default function PitchDeck() {
                     variant="ghost"
                     size="icon"
                     className="h-8 w-8"
-                    onClick={() =>
-                      setActiveSlide((prev) =>
-                        prev < slides.length - 1 ? prev + 1 : prev
-                      )
-                    }
+                    onClick={() => changeSlide(activeSlide + 1)}
                     disabled={activeSlide === slides.length - 1}
                   >
                     <ChevronDown className="w-4 h-4" />
@@ -1064,15 +1116,17 @@ export default function PitchDeck() {
             </CardHeader>
 
             <CardContent className="flex-1 overflow-auto p-5 lg:p-6">
-              <AnimatePresence mode="wait">
+              <AnimatePresence mode="wait" custom={direction}>
                 <motion.div
                   key={activeSlide}
-                  initial={{ opacity: 0, y: 15 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -15 }}
+                  custom={direction}
+                  variants={variants}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
                   transition={{
-                    duration: 0.25,
-                    ease: "easeOut",
+                    y: { type: "spring", stiffness: 300, damping: 30 },
+                    opacity: { duration: 0.2 }
                   }}
                   className="h-full"
                 >
@@ -1087,7 +1141,7 @@ export default function PitchDeck() {
             {slides.map((_, index) => (
               <button
                 key={index}
-                onClick={() => setActiveSlide(index)}
+                onClick={() => changeSlide(index)}
                 className={`
                   h-1.5 rounded-full transition-all duration-200
                   ${
